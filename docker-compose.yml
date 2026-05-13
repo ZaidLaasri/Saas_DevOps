@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: ./abonnement_backend
+      dockerfile: Dockerfile
+    image: abonnement-backend:dev
+    container_name: abonnement-backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: abonnement-backend
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:h2:mem:abonnementdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+      SPRING_DATASOURCE_DRIVER: org.h2.Driver
+      SPRING_DATASOURCE_USERNAME: sasa
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_H2_CONSOLE_ENABLED: "true"
+    networks:
+      - abonnement-network
+
+  frontend:
+    build:
+      context: ./abonnement-frontend
+      dockerfile: Dockerfile
+    image: abonnement-frontend:dev
+    container_name: abonnement-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - abonnement-network
+
+networks:
+  abonnement-network:
+    driver: bridge
