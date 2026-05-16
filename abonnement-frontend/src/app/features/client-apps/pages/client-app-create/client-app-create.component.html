@@ -1,0 +1,73 @@
+<div class="create-page">
+  <div class="page-header">
+    <div>
+      <h2>Créer une application cliente</h2>
+      <p>Ajoutez une application qui pourra utiliser l’API de gestion d’abonnements.</p>
+    </div>
+
+    <a mat-button routerLink="/client-apps">
+      Retour à la liste
+    </a>
+  </div>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom de l’application</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            placeholder="Ex: Mobile App Premium"
+          />
+
+          <mat-error *ngIf="form.controls.name.hasError('required')">
+            Le nom de l’application est obligatoire.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.name.hasError('minlength')">
+            Le nom doit contenir au moins 2 caractères.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email de contact</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="contactEmail"
+            placeholder="admin@example.com"
+          />
+
+          <mat-error *ngIf="form.controls.contactEmail.hasError('required')">
+            L’email de contact est obligatoire.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.contactEmail.hasError('email')">
+            Veuillez saisir un email valide.
+          </mat-error>
+        </mat-form-field>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <div class="form-actions">
+          <a mat-button routerLink="/client-apps">
+            Annuler
+          </a>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="loading"
+          >
+            {{ loading ? 'Création en cours...' : 'Créer l’application' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

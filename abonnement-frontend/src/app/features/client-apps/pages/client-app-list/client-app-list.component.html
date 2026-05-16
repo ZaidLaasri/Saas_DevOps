@@ -1,0 +1,73 @@
+<div class="page-header">
+  <div>
+    <h2>Applications clientes</h2>
+    <p>Liste des applications connectées à la plateforme SaaS.</p>
+  </div>
+
+  <a mat-raised-button color="primary" routerLink="/client-apps/create">
+    Nouvelle application
+  </a>
+</div>
+
+<div *ngIf="loading" class="info-message">
+  Chargement des applications...
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
+<table
+  mat-table
+  [dataSource]="clientApps"
+  class="mat-elevation-z2 full-width-table"
+  *ngIf="!loading && clientApps.length > 0"
+>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let app">{{ app.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Nom</th>
+    <td mat-cell *matCellDef="let app">{{ app.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="contactEmail">
+    <th mat-header-cell *matHeaderCellDef>Email de contact</th>
+    <td mat-cell *matCellDef="let app">{{ app.contactEmail }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="apiKey">
+    <th mat-header-cell *matHeaderCellDef>API Key</th>
+    <td mat-cell *matCellDef="let app">
+      <code>{{ app.apiKey }}</code>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Statut</th>
+    <td mat-cell *matCellDef="let app">
+      <span class="status-badge" [class.active]="app.status === 'ACTIVE'">
+        {{ app.status }}
+      </span>
+    </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let app">
+      <a mat-button color="primary" [routerLink]="['/client-apps', app.id]">
+        Détails
+      </a>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<div *ngIf="!loading && clientApps.length === 0" class="empty-state">
+  Aucune application cliente trouvée.
+</div>

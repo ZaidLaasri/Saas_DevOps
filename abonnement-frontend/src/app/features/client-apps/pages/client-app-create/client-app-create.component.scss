@@ -1,0 +1,45 @@
+.create-page {
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: #6b7280;
+  }
+}
+
+.form-card {
+  max-width: 600px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.error-message {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}

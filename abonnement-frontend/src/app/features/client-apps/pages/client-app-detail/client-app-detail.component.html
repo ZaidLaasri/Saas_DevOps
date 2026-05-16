@@ -1,0 +1,57 @@
+<div class="detail-page">
+  <div class="page-header">
+    <div>
+      <h2>Détails de l’application</h2>
+      <p>Consultez les informations de l’application cliente.</p>
+    </div>
+
+    <a mat-button routerLink="/client-apps">
+      Retour à la liste
+    </a>
+  </div>
+
+  <div *ngIf="loading" class="info-message">
+    Chargement des détails...
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <mat-card *ngIf="clientApp" class="detail-card">
+    <mat-card-content>
+      <div class="detail-row">
+        <span>Nom</span>
+        <strong>{{ clientApp.name }}</strong>
+      </div>
+
+      <div class="detail-row">
+        <span>Email de contact</span>
+        <strong>{{ clientApp.contactEmail }}</strong>
+      </div>
+
+      <div class="detail-row">
+        <span>Statut</span>
+        <strong class="status-badge" [class.active]="clientApp.status === 'ACTIVE'">
+          {{ clientApp.status }}
+        </strong>
+      </div>
+
+      <div class="api-key-block">
+        <span>API Key</span>
+
+        <div class="api-key-value">
+          <code>{{ clientApp.apiKey }}</code>
+
+          <button mat-stroked-button type="button" (click)="copyApiKey()">
+            Copier
+          </button>
+        </div>
+
+        <small *ngIf="copySuccess">
+          API Key copiée dans le presse-papiers.
+        </small>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
