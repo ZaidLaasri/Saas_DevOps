@@ -1,4 +1,4 @@
-name: CI - SaaS DevOps Platform
+name: CI/CD - SaaS DevOps Platform
 
 on:
   push:
@@ -7,6 +7,14 @@ on:
   pull_request:
     branches:
       - main
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAMESPACE: ${{ github.repository_owner }}/saas_devops
 
 jobs:
   backend:
@@ -60,18 +68,48 @@ jobs:
         run: npm run build -- --configuration production
 
   docker:
-    name: Docker - Build Images
+    name: Docker - Build and Push Images
     runs-on: ubuntu-latest
     needs:
       - backend
       - frontend
 
+    if: github.event_name == 'push'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Convert image namespace to lowercase
+        run: echo "IMAGE_NAMESPACE_LC=$(echo '${{ env.IMAGE_NAMESPACE }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build backend Docker image
-        run: docker build -t abonnement-backend:ci ./abonnement_backend
+        run: |
+          docker build \
+            -t $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-backend:latest \
+            -t $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-backend:${{ github.sha }} \
+            ./abonnement_backend
 
       - name: Build frontend Docker image
-        run: docker build -t abonnement-frontend:ci ./abonnement-frontend
+        run: |
+          docker build \
+            -t $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-frontend:latest \
+            -t $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-frontend:${{ github.sha }} \
+            ./abonnement-frontend
+
+      - name: Push backend Docker image
+        run: |
+          docker push $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-backend:latest
+          docker push $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-backend:${{ github.sha }}
+
+      - name: Push frontend Docker image
+        run: |
+          docker push $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-frontend:latest
+          docker push $REGISTRY/$IMAGE_NAMESPACE_LC/abonnement-frontend:${{ github.sha }}
