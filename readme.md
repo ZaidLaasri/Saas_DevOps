@@ -22,3 +22,13 @@ The project uses environment variables to externalize configuration from the Doc
 
 A `.env.example` file is provided to document all required variables without exposing sensitive credentials.
 The real `.env` file is ignored by Git and used only for local development.
+
+## Production-like Docker Compose
+
+The project provides a production-like Docker Compose file that runs the application using Docker images published to GitHub Container Registry.
+
+Unlike the local development Compose file, `docker-compose.prod.yml` does not build images locally. It pulls pre-built and versioned images from GHCR, which simulates a real deployment workflow.
+
+```bash
+docker compose -f docker-compose.prod.yml pull
+docker compose -f docker-compose.prod.yml up
