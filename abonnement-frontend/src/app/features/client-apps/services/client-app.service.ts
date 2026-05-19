@@ -9,7 +9,7 @@ import { CreateClientAppRequest } from '../models/create-client-app-request.mode
   providedIn: 'root'
 })
 export class ClientAppService {
-  private readonly apiUrl = 'http://localhost:8080/api/client-apps';
+  private readonly apiUrl = '/api/client-apps';
 
   constructor(private readonly http: HttpClient) {}
 
